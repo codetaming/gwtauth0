@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to="GwtAuth0">
+    <inherits name="com.google.gwt.inject.Inject"/>
+    <inherits name="com.google.gwt.resources.Resources"/>
+    <entry-point class="org.codetaming.gwt.auth0.client.GwtAuth0Client"/>
+</module>
