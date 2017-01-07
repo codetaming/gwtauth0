@@ -19,6 +19,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'com.google.gwt:gwt-user:2.8.0',
-            'com.google.gwt:gwt-dev:2.8.0'
+    compileOnly 'com.google.gwt:gwt-user:2.8.0'
+    compileOnly 'com.google.gwt:gwt-dev:2.8.0'
+    compile 'com.google.gwt.inject:gin:2.1.2'
 }

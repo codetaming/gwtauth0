@@ -8,7 +8,7 @@ import com.google.web.bindery.event.shared.EventBus;
 
 import java.util.logging.Logger;
 
-public class Auth0Client implements AuthenticationClient {
+public class Auth0Client {
 
     private static final String ID_TOKEN = "id_token";
 
@@ -42,7 +42,7 @@ public class Auth0Client implements AuthenticationClient {
         );
         var self = this;
         var callback = $entry(function (authResult) {
-            self.@org.codetaming.skillsmapper.client.auth0.Auth0Client::loginCallback(Ljava/lang/String;)(
+            self.@org.codetaming.gwt.auth0.Auth0Client::loginCallback(Ljava/lang/String;)(
                 authResult.idToken);
         });
         $wnd.lock.on("authenticated", callback);
@@ -59,20 +59,21 @@ public class Auth0Client implements AuthenticationClient {
                 .inject();
     }
 
-    @Override
     public void login() {
         nativeLogin();
     }
 
-    @Override
     public void logout() {
         if (localStorage != null) {
             localStorage.removeItem(ID_TOKEN);
-            eventBus.fireEvent(new LogoutEvent());
+            performLogoutActions();
         }
     }
 
-    @Override
+    protected void performLogoutActions() {
+        LOGGER.info("Logout");
+    }
+
     public String getToken() {
         if (localStorage != null) {
             return localStorage.getItem(ID_TOKEN);
@@ -80,10 +81,9 @@ public class Auth0Client implements AuthenticationClient {
         return "";
     }
 
-    @Override
     public boolean isLoggedIn() {
         if (localStorage != null) {
-            return localStorage.getItem("id_token")!=null;
+            return localStorage.getItem("id_token") != null;
         }
         return false;
     }
@@ -100,7 +100,8 @@ public class Auth0Client implements AuthenticationClient {
             if (err) {
                 return alert('There was an error getting the profile: ' + err.message);
             }
-            this.@org.codetaming.skillsmapper.client.auth0.Auth0Client::storeProfile(Ljava/lang/String;)(profile.name);
+            this.@org.codetaming.gwt.auth0.Auth0Client::storeProfile(Ljava/lang/String;)(
+                profile.name);
         });
     }-*/;
 
@@ -114,9 +115,14 @@ public class Auth0Client implements AuthenticationClient {
     private void loginCallback(String idToken) {
         if (localStorage != null) {
             localStorage.setItem("id_token", idToken);
-            eventBus.fireEvent(new LoginEvent());
-            retrieveProfile();
+            performLoginAction();
+
         }
+    }
+
+    protected void performLoginAction() {
+        LOGGER.info("Logout");
+        retrieveProfile();
     }
 
     private final native void nativeLogin() /*-{
