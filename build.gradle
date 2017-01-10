@@ -2,6 +2,7 @@ group 'org.codetaming.gwtauth0'
 version = '0.1.0'
 
 apply plugin: 'java'
+apply plugin: 'maven-publish'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -21,6 +22,7 @@ repositories {
 dependencies {
     compileOnly 'com.google.gwt:gwt-user:2.8.0'
     compileOnly 'com.google.gwt:gwt-dev:2.8.0'
+    compileOnly 'org.fusesource.restygwt:restygwt:2.2.0'
     compile 'com.google.gwt.inject:gin:2.1.2'
 }
 
@@ -62,3 +64,25 @@ task compileGwt(dependsOn: classes, type: JavaExec) {
 }
 
 jar.dependsOn compileGwt
+
+jar.doFirst {
+    sourceSets.main.java.srcDirs.each {
+        from it
+    }
+}
+
+task sourceJar(type: Jar) { from sourceSets.main.allJava }
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact sourceJar { classifier "sources" }
+        }
+    }
+    repositories {
+        maven {
+            url "file://Users/danielvaughan/Development/git/maven-public/releases"
+        }
+    }
+}

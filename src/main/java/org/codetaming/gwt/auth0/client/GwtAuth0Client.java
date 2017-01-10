@@ -7,7 +7,7 @@ import com.google.inject.Inject;
 
 import java.util.logging.Logger;
 
-public class GwtAuth0Client {
+public class GwtAuth0Client implements AuthenticationClient {
 
     private static final String ID_TOKEN = "id_token";
 
@@ -55,10 +55,12 @@ public class GwtAuth0Client {
                 .inject();
     }
 
+    @Override
     public void login() {
         nativeLogin();
     }
 
+    @Override
     public void logout() {
         if (localStorage != null) {
             localStorage.removeItem(ID_TOKEN);
@@ -70,6 +72,7 @@ public class GwtAuth0Client {
         LOGGER.info("Logout");
     }
 
+    @Override
     public String getToken() {
         if (localStorage != null) {
             return localStorage.getItem(ID_TOKEN);
@@ -77,6 +80,7 @@ public class GwtAuth0Client {
         return "";
     }
 
+    @Override
     public boolean isLoggedIn() {
         if (localStorage != null) {
             return localStorage.getItem("id_token") != null;
